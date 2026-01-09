@@ -26,10 +26,22 @@ jobs:
           dir
 
       - name: Build with Maven
-        working-directory: Open
-        run: mvn clean install
+        shell: pwsh
+        run: |
+                $pom = Get-ChildItem -Path $env:GITHUB_WORKSPACE -Recurse -Filter pom.xml |
+                 Where-Object { $_.FullName -notmatch '\\target\\' } |
+                 Select-Object -First 1
 
-      - name: Upload artifact for deployment job
+                if (-not $pom) { 
+                    Write-Error "pom.xml not found anywhere in the repo."
+                    exit 1}
+
+                Write-Host "Using pom: $($pom.FullName)"
+                mvn -f $pom.FullName clean install
+
+
+      - name: 
+            Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: java-app
@@ -53,4 +65,5 @@ jobs:
           slot-name: 'Production'
           package: '*.jar'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_BEF1D936025B41DD9DDF389E5D753888 }}
+
 
