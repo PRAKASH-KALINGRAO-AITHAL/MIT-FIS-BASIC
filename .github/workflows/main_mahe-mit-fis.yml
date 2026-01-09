@@ -20,6 +20,10 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
+      - name: List repository structure
+        run: |
+          pwd
+          dir
 
       - name: Build with Maven
         working-directory: Open
@@ -49,3 +53,4 @@ jobs:
           slot-name: 'Production'
           package: '*.jar'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_BEF1D936025B41DD9DDF389E5D753888 }}
+
