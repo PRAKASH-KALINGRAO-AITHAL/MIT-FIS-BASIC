@@ -40,18 +40,23 @@ jobs:
                 mvn -f $pom.FullName clean install
 
 
-      - name: 
-            Upload artifact for deployment job
+      - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: java-app
-          path: Open/target/*.jar
+          path: '**/target/*.jar'
 
   deploy:
     runs-on: windows-latest
     needs: build
 
     steps:
+      
+
+
+
+
+    
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
@@ -65,5 +70,6 @@ jobs:
           slot-name: 'Production'
           package: '*.jar'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_BEF1D936025B41DD9DDF389E5D753888 }}
+
 
 
